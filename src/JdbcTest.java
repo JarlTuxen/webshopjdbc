@@ -12,6 +12,10 @@ public class JdbcTest {
         getAll();
         insertRow();
         getAll();
+        deleteRow();
+        getAll();
+        updateRow();
+        getAll();
     }
 
     public static void getAll(){
@@ -72,5 +76,47 @@ public class JdbcTest {
         }
         return connection;
         
+    }
+
+    public static void deleteRow(){
+        final String DELETE_QUERY = "DELETE FROM product WHERE id=?";
+
+        Connection con = getConnection();
+
+        //id på den der skal slettes
+        int id = 4;
+
+        try{
+            PreparedStatement psDeleteRow = connection.prepareStatement(DELETE_QUERY);
+            psDeleteRow.setInt(1, id);
+            psDeleteRow.executeUpdate();
+            System.out.println("Row deleted");
+        }
+        catch (SQLException e){
+            System.out.println("Could not delete");
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateRow(){
+        final String UPDATE_QUERY = "UPDATE product SET name = ?, price = ? WHERE id = ?";
+        int id = 3;
+        String name = "Kiks";
+        int price = 11;
+
+        Connection con = getConnection();
+        try{
+            PreparedStatement psUpdateRow = con.prepareStatement(UPDATE_QUERY);
+            psUpdateRow.setString(1, name);
+            psUpdateRow.setInt(2, price);
+            psUpdateRow.setInt(3, id);
+            psUpdateRow.executeUpdate();
+            System.out.println("Row updated");
+        }
+        catch(SQLException e){
+            System.out.println("Could not update");
+            e.printStackTrace();
+        }
+
     }
 }
